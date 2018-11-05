@@ -134,24 +134,30 @@ public class JavaAlgorithms {
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
      */
-    public static boolean isPrime(int number) {
-        for (int i = 2; i < number; i++) {
-            if (number % i == 0) {
-                return false;
+    public static int calcPrimesNumber(int limit) throws NotImplementedError {
+        boolean[] isComposite = new boolean[limit + 1];
+        for (int i = 2; i * i <= limit; i++) {
+            if (!isComposite [i]) {
+                for (int j = i; i * j <= limit; j++) {
+                    isComposite [i*j] = true;
+                }
             }
         }
-        return true;
-    }
-    static public int calcPrimesNumber(int limit) throws NotImplementedError {
-        int count=1;
-        for(int number = 2; count<=limit; number++){
-            if(isPrime(number)){
-                System.out.println(number);
-                count++;
-            }
+        int numPrimes = 0;
+        for (int i = 2; i <= limit; i++) {
+            if (!isComposite [i]) numPrimes++;
         }
-        return count;
+        int [] primes = new int [numPrimes];
+        int index = 0;
+        for (int i = 2; i <= limit; i++) {
+            if (!isComposite [i]) primes [index++] = i;
+        }
+        return primes.length;
     }
+    /**
+     * Для решения использовалось "Решето Эратосфена"
+     * https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
+     */
 
     /**
      * Балда
