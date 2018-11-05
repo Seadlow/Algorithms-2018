@@ -135,15 +135,14 @@ public class JavaAlgorithms {
      * Единица простым числом не считается.
      */
     static public int calcPrimesNumber(int limit) throws NotImplementedError {
-        int result = 0;
-        if (limit > 1) {
+        int result = 1;
+        if (limit < 2) return 0;
+        else {
             for (int i = 2; i <= Math.ceil(Math.sqrt(limit)); i++) {
                 if (!(limit % i == 0)) {
                     result++;
                 }
             }
-        } else {
-            return result;
         }
         return result;
     }
