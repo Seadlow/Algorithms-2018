@@ -134,17 +134,23 @@ public class JavaAlgorithms {
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
      */
-    static public int calcPrimesNumber(int limit) throws NotImplementedError {
-        int result = 1;
-        if (limit < 2) return 0;
-        else {
-            for (int i = 2; i <= Math.ceil(Math.sqrt(limit)); i++) {
-                if (!(limit % i == 0)) {
-                    result++;
-                }
+    public static boolean isPrime(int number) {
+        for (int i = 2; i < number; i++) {
+            if (number % i == 0) {
+                return false;
             }
         }
-        return result;
+        return true;
+    }
+    static public int calcPrimesNumber(int limit) throws NotImplementedError {
+        int count=1;
+        for(int number = 2; count<=limit; number++){
+            if(isPrime(number)){
+                System.out.println(number);
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
