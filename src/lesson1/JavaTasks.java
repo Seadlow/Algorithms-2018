@@ -110,7 +110,7 @@ public class JavaTasks {
                 answer.add(tempValue);
         }
         Collections.sort(answer);
-        BufferedWriter writer = new BufferedWriter(new FileWriter(inputName));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(outputName));
         for (double elements : answer) {
             writer.write(String.valueOf(elements));
             writer.newLine();
@@ -152,57 +152,52 @@ public class JavaTasks {
         ArrayList<Integer> listOfNumbers = new ArrayList<>();
         Map<Integer, Integer> map = new HashMap<>();
         int maxValue = Integer.MAX_VALUE;
-        int value, count = 0;
+        int count = 0;
+        int value;
+        int counter;
+        int key;
         String textLine;
         BufferedReader reader = new BufferedReader(new FileReader(inputName));
-        {
-            while ((textLine = reader.readLine()) != null) {
-                int key = Integer.parseInt(textLine);
-                listOfNumbers.add(key);
-                if (map.containsKey(key)) {
-                    value = map.get(key);
-                    map.put(key, value + 1);
-                    if (value > count || (value == count && key < maxValue)) {
-                        count = value;
-                        maxValue = key;
-                    } else {
-                        map.put(key, 1);
-                        if (value == count && key < maxValue) {
-                            maxValue = key;
-                        }
-                    }
-                }
-                BufferedWriter writer = new BufferedWriter(new FileWriter(inputName));
-                for (int elements : listOfNumbers) {
-                    if (elements != maxValue) {
-                        writer.write(String.valueOf(elements));
-                        writer.newLine();
-                    }
-                }
-                for (int i = 0; i < count + 1; i++){
-                    writer.write(String.valueOf(maxValue));
-                    writer.newLine();
-                }
-                writer.close();
+        while ((textLine = reader.readLine()) != null) {
+            key = Integer.parseInt(textLine);
+            listOfNumbers.add(key);
+            map.merge(key, 1, ((a, b) -> a + b));
+            value = map.get(key);
+            if (value > count || ((key < maxValue) && (value == count))) {
+                count = value;
+                maxValue = key;
             }
         }
+        BufferedWriter writer = new BufferedWriter(new FileWriter(outputName));
+        for (int i : listOfNumbers) {
+            if (i != maxValue) {
+                writer.write(String.valueOf(i));
+                writer.newLine();
+            }
+        }
+        for (int i = 0; i < count; i++) {
+            writer.write(String.valueOf(maxValue));
+            writer.newLine();
+        }
+        writer.close();
     }
 
-        /**
-         * Соединить два отсортированных массива в один
-         * <p>
-         * Простая
-         * <p>
-         * Задан отсортированный массив first и второй массив second,
-         * первые first.size ячеек которого содержат null, а остальные ячейки также отсортированы.
-         * Соединить оба массива в массиве second так, чтобы он оказался отсортирован. Пример:
-         * <p>
-         * first = [4 9 15 20 28]
-         * second = [null null null null null 1 3 9 13 18 23]
-         * <p>
-         * Результат: second = [1 3 4 9 9 13 15 20 23 28]
-         */
-        static <T extends Comparable<T>>void mergeArrays (T[]first, T[]second){
-            // Fake solution
-        }
+
+    /**
+     * Соединить два отсортированных массива в один
+     * <p>
+     * Простая
+     * <p>
+     * Задан отсортированный массив first и второй массив second,
+     * первые first.size ячеек которого содержат null, а остальные ячейки также отсортированы.
+     * Соединить оба массива в массиве second так, чтобы он оказался отсортирован. Пример:
+     * <p>
+     * first = [4 9 15 20 28]
+     * second = [null null null null null 1 3 9 13 18 23]
+     * <p>
+     * Результат: second = [1 3 4 9 9 13 15 20 23 28]
+     */
+    static <T extends Comparable<T>> void mergeArrays(T[] first, T[] second) {
+        // Fake solution
     }
+}
