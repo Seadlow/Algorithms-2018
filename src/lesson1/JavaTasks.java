@@ -2,6 +2,11 @@ package lesson1;
 
 import kotlin.NotImplementedError;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IllegalFormatException;
+
 @SuppressWarnings("unused")
 public class JavaTasks {
     /**
@@ -96,8 +101,23 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
-    static public void sortTemperatures(String inputName, String outputName) {
-        throw new NotImplementedError();
+    static public void sortTemperatures(String inputName, String outputName) throws IOException,
+            IllegalFormatException {
+        String textLine;
+        ArrayList<Double> answer = new ArrayList<>();
+        BufferedReader reader = new BufferedReader(new FileReader(inputName));
+        while ((textLine = reader.readLine()) != null) {
+            double tempValue = Double.parseDouble(textLine);
+            if (tempValue >= -273.0 || tempValue <= 500.0)
+                answer.add(tempValue);
+        }
+        Collections.sort(answer);
+        BufferedWriter writer = new BufferedWriter(new FileWriter(inputName));
+        for (double elements : answer){
+            writer.write(String.valueOf(elements));
+            writer.newLine();
+        }
+        writer.close();
     }
 
     /**
