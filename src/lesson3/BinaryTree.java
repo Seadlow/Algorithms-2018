@@ -4,6 +4,7 @@ import kotlin.NotImplementedError;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.tree.TreeNode;
 import java.util.*;
 
 // Attention: comparable supported but comparator is not
@@ -36,12 +37,10 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         Node<T> newNode = new Node<>(t);
         if (closest == null) {
             root = newNode;
-        }
-        else if (comparison < 0) {
+        } else if (comparison < 0) {
             assert closest.left == null;
             closest.left = newNode;
-        }
-        else {
+        } else {
             assert closest.right == null;
             closest.right = newNode;
         }
@@ -70,6 +69,10 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         throw new NotImplementedError();
     }
 
+    public Node<T> removeAlgorithm(Node<T> node, Object o) {
+        throw new NotImplementedError();
+    }
+
     @Override
     public boolean contains(Object o) {
         @SuppressWarnings("unchecked")
@@ -87,12 +90,10 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         int comparison = value.compareTo(start.value);
         if (comparison == 0) {
             return start;
-        }
-        else if (comparison < 0) {
+        } else if (comparison < 0) {
             if (start.left == null) return start;
             return find(start.left, value);
-        }
-        else {
+        } else {
             if (start.right == null) return start;
             return find(start.right, value);
         }
@@ -101,27 +102,42 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     public class BinaryTreeIterator implements Iterator<T> {
 
         private Node<T> current = null;
+        Stack<Node<T>> stack = new Stack<>();
 
-        private BinaryTreeIterator() {}
+        private BinaryTreeIterator() {
+            while (root != null){
+                stack.push(root);
+                root = root.left;
+            }
+        }
 
         /**
          * Поиск следующего элемента
          * Средняя
          */
+        //Ресурсоёмкость O(n)
+        //Трудоёмкость O(1)
         private Node<T> findNext() {
-            // TODO
-            throw new NotImplementedError();
+            return stack.pop();
         }
 
         @Override
         public boolean hasNext() {
-            return findNext() != null;
+            return !stack.isEmpty();
         }
 
         @Override
         public T next() {
             current = findNext();
+            Node<T> node = current;
             if (current == null) throw new NoSuchElementException();
+            if(node.right != null){
+                node = node.right;
+                while (node != null){
+                    stack.push(node);
+                    node = node.left;
+                }
+            }
             return current.value;
         }
 
@@ -165,26 +181,61 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         throw new NotImplementedError();
     }
 
+    public void setAdder(SortedSet<T> set, Node<T> node) {
+        set.add(node.value);
+        if (node.left != null) setAdder(set, node.left);
+        if (node.right != null) setAdder(set, node.right);
+    }
+
+    SortedSet<T> resultSet = new TreeSet<>();
+
     /**
      * Найти множество всех элементов меньше заданного
      * Сложная
      */
+    // Трудоемкость O(N)
+    // Ресурсоемкость O(N)
     @NotNull
     @Override
     public SortedSet<T> headSet(T toElement) {
-        // TODO
-        throw new NotImplementedError();
+        headSetFinder(resultSet, root, toElement);
+        return resultSet;
+    }
+
+    public void headSetFinder(SortedSet<T> set, Node<T> node, T toElement) {
+        int compare = node.value.compareTo(toElement);
+        if ((compare <= 0)&&(node.left != null))     {
+            setAdder(set, node.left);
+        }
+        if (compare < 0) {
+            set.add(node.value);
+            if (node.right != null) headSetFinder(set, node.right, toElement);
+        }
     }
 
     /**
      * Найти множество всех элементов больше или равных заданного
      * Сложная
      */
+    // Трудоемкость O(N)
+    // Ресурсоемкость O(N)
     @NotNull
     @Override
     public SortedSet<T> tailSet(T fromElement) {
-        // TODO
-        throw new NotImplementedError();
+        tailSetFinder(resultSet, root, fromElement);
+        return resultSet;
+    }
+
+    public void tailSetFinder(SortedSet<T> set, Node<T> node, T toElement) {
+        int compare = node.value.compareTo(toElement);
+        if (compare >= 0) {
+            set.add(node.value);
+            if (node.right != null) setAdder(set, node.right);
+            if (node.left != null) tailSetFinder(set, node.left, toElement);
+        }
+        if (compare < 0) {
+            if (node.right != null) tailSetFinder(set, node.right, toElement);
+        }
     }
 
     @Override

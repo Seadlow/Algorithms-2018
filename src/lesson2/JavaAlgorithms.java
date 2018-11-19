@@ -3,7 +3,6 @@ package lesson2;
 import kotlin.NotImplementedError;
 import kotlin.Pair;
 
-import java.math.*;
 import java.util.Set;
 
 @SuppressWarnings("unused")
@@ -137,26 +136,26 @@ public class JavaAlgorithms {
     public static int calcPrimesNumber(int limit) throws NotImplementedError {
         boolean[] isComposite = new boolean[limit + 1];
         for (int i = 2; i * i <= limit; i++) {
-            if (!isComposite [i]) {
+            if (!isComposite[i]) {
                 for (int j = i; i * j <= limit; j++) {
-                    isComposite [i*j] = true;
+                    isComposite[i * j] = true;
                 }
             }
         }
         int numPrimes = 0;
         for (int i = 2; i <= limit; i++) {
-            if (!isComposite [i]) numPrimes++;
+            if (!isComposite[i]) numPrimes++;
         }
-        int [] primes = new int [numPrimes];
+        int[] primes = new int[numPrimes];
         int index = 0;
         for (int i = 2; i <= limit; i++) {
-            if (!isComposite [i]) primes [index++] = i;
+            if (!isComposite[i]) primes[index++] = i;
         }
         return primes.length;
     }
-    /**
-     * Для решения использовалось "Решето Эратосфена"
-     * https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
+    /*
+      Для решения использовалось "Решето Эратосфена"
+      https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
      */
 
     /**
