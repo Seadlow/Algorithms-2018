@@ -1,5 +1,6 @@
 package lesson6
 
+import java.lang.IllegalArgumentException
 import kotlin.test.assertEquals
 
 abstract class AbstractDynamicTests {
@@ -31,6 +32,13 @@ abstract class AbstractDynamicTests {
         ))
     }
 
+    /**
+     * Ожидаемый вариант: "дд саы чтых,
+     * евшнео ваа се сви дн."
+     * Так как при сравнении первых строк нельзя достать "д" дважды, подозреваю, что в тестах закралась ошибка.
+     * Посмотрите, пожалуйста.
+     */
+
     fun longestIncreasingSubSequence(longestIncreasingSubSequence: (List<Int>) -> List<Int>) {
         assertEquals(listOf(), longestIncreasingSubSequence(listOf()))
         assertEquals(listOf(1), longestIncreasingSubSequence(listOf(1)))
@@ -44,6 +52,13 @@ abstract class AbstractDynamicTests {
                 23, 76, 34, 93, 123, 21, 56, 87, 91, 12, 45, 98, 140, 12, 5, 38, 349, 65, 94,
                 45, 76, 15, 99, 100, 88, 84, 35, 88
         )))
+    }
+
+    fun belowZero(longestIncreasingSubSequence: (List<Int>) -> List<Int>) {
+        assertEquals(listOf(-2, -1), longestIncreasingSubSequence(listOf(-2, -1)))
+        assertEquals(listOf(-11, 2, 4, 6, 7, 8, 9),
+                longestIncreasingSubSequence(listOf(-11, 2, -3, 4, -5, 6, 7, 8, 9, -10)))
+        assertEquals(listOf(-9, -8, 2, 5, 12), longestIncreasingSubSequence(listOf(-9, -15, -24, -8, 2, 14, 5, 12)))
     }
 
     fun shortestPathOnField(shortestPathOnField: (String) -> Int) {

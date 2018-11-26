@@ -1,6 +1,7 @@
 package lesson6
 
 import org.junit.jupiter.api.Tag
+import java.lang.IllegalArgumentException
 import kotlin.test.Test
 
 class DynamicTestsJava : AbstractDynamicTests() {
@@ -15,6 +16,7 @@ class DynamicTestsJava : AbstractDynamicTests() {
     @Tag("Hard")
     fun testLongestIncreasingSubSequence() {
         longestIncreasingSubSequence { JavaDynamicTasks.longestIncreasingSubSequence(it) }
+        belowZero { JavaDynamicTasks.longestIncreasingSubSequence(it) }
     }
 
     @Test
