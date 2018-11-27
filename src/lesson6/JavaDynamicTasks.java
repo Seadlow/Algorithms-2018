@@ -20,31 +20,43 @@ public class JavaDynamicTasks {
      */
     // Трудоемкость O(N*M)
     // Ресурсоемкость O(N*M)
-    public static String longestCommonSubSequence(String first, String second) {
-        int[][] matrix = new int[first.length() + 1][second.length() + 1];
-        for (int i = 0; i < first.length(); i++)
-            for (int j = 0; j < second.length(); j++)
-                if (first.charAt(i) == second.charAt(j))
-                    matrix[i + 1][j + 1] = matrix[i][j] + 1;
-                else
-                    matrix[i + 1][j + 1] =
-                            Math.max(matrix[i + 1][j], matrix[i][j + 1]);
+    public static  String longestCommonSubSequence(String first, String second) {
+        int[][] matrix = buildMatrix(first, second);
+        int i = first.length();
+        int j = second.length();
         StringBuilder answer = new StringBuilder();
-        for (int x = first.length(), y = second.length();
-             x != 0 && y != 0; ) {
-            if (matrix[x][y] == matrix[x - 1][y])
-                x--;
-            else if (matrix[x][y] == matrix[x][y - 1])
-                y--;
-            else {
-                if (first.charAt(x - 1) == second.charAt(y - 1)) {
-                    answer.append(first.charAt(x - 1));
-                    x--;
-                    y--;
-                }
+        while ((i > 0) && (j > 0)) {
+            char f = first.charAt(i-1);
+            char s = second.charAt(j-1);
+            if (first.charAt(i - 1) == second.charAt(j - 1)) {
+                answer.append(first.charAt(i - 1));
+                i--;
+                j--;
+            } else if (matrix[i][j] == matrix[i-1][j]) {
+                i--;
+            } else if (matrix[i][j] == matrix[i][j-1]){
+                j--;
             }
         }
         return answer.reverse().toString();
+    }
+
+    private static int[][] buildMatrix(String first, String second) {
+        int[][] matrix = new int[first.length() + 1][second.length() + 1];
+        for (int i = 0; i <= first.length(); i++) {
+            for (int j = 0; j <= second.length(); j++) {
+                if ((i == 0) || (j == 0)) {
+                    matrix[i][j] = 0;
+                } else {
+                    if (first.charAt(i - 1) == second.charAt(j - 1)) {
+                        matrix[i][j] = matrix[i - 1][j - 1] + 1;
+                    } else {
+                        matrix[i][j] = Math.max(matrix[i - 1][j], matrix[i][j - 1]);
+                    }
+                }
+            }
+        }
+        return matrix;
     }
 
     /**

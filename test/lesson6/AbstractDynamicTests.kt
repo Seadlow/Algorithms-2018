@@ -32,13 +32,6 @@ abstract class AbstractDynamicTests {
         ))
     }
 
-    /**
-     * Ожидаемый вариант: "дд саы чтых,
-     * евшнео ваа се сви дн."
-     * Так как при сравнении первых строк нельзя достать "д" дважды, подозреваю, что в тестах закралась ошибка.
-     * Посмотрите, пожалуйста.
-     */
-
     fun longestIncreasingSubSequence(longestIncreasingSubSequence: (List<Int>) -> List<Int>) {
         assertEquals(listOf(), longestIncreasingSubSequence(listOf()))
         assertEquals(listOf(1), longestIncreasingSubSequence(listOf(1)))
