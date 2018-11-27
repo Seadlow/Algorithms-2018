@@ -22,28 +22,39 @@ public class JavaDynamicTasks {
     // Ресурсоемкость O(N*M)
     public static String longestCommonSubSequence(String first, String second) {
         int[][] matrix = new int[first.length() + 1][second.length() + 1];
-        for (int i = 0; i < first.length(); i++)
-            for (int j = 0; j < second.length(); j++)
+        for (int i = 0; i < first.length(); i++) {
+            for (int j = 0; j < second.length(); j++) {
+                if (i == 0) {
+                    matrix[i][j] = 0;
+                }
+                if (j == 0) {
+                    matrix[i][j] = 0;
+                }
                 if (first.charAt(i) == second.charAt(j))
                     matrix[i + 1][j + 1] = matrix[i][j] + 1;
-                else
+                else {
                     matrix[i + 1][j + 1] =
                             Math.max(matrix[i + 1][j], matrix[i][j + 1]);
-        StringBuilder answer = new StringBuilder();
-        for (int x = first.length(), y = second.length();
-             x != 0 && y != 0; ) {
-            if (matrix[x][y] == matrix[x - 1][y])
-                x--;
-            else if (matrix[x][y] == matrix[x][y - 1])
-                y--;
-            else {
-                if (first.charAt(x - 1) == second.charAt(y - 1)) {
-                    answer.append(first.charAt(x - 1));
-                    x--;
-                    y--;
                 }
             }
         }
+        StringBuilder answer = new StringBuilder(Math.max(first.length(),second.length()));
+        int x = first.length() - 1;
+        int y = second.length() - 1;
+        int k = matrix[first.length()][second.length()] - 1;
+        while (k >= 0) {
+            if (first.charAt(x) == second.charAt(y)) {
+                answer.append(first.charAt(x));
+                x = x - 1;
+                y = y - 1;
+                k = k - 1;
+            } else if (matrix[x + 1][y] < matrix[x][y + 1]) {
+                x = x - 1;
+            } else {
+                y = y - 1;
+            }
+        }
+
         return answer.reverse().toString();
     }
 
