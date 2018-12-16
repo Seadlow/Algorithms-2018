@@ -23,5 +23,8 @@ class DynamicTestsJava : AbstractDynamicTests() {
     @Tag("Hard")
     fun testShortestPathOnField() {
         shortestPathOnField { JavaDynamicTasks.shortestPathOnField(it) }
+        zeroesField { JavaDynamicTasks.shortestPathOnField(it) }
+        decimalField { JavaDynamicTasks.shortestPathOnField(it) }
+        bigNumbers { JavaDynamicTasks.shortestPathOnField(it) }
     }
 }

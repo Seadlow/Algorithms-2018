@@ -1,7 +1,11 @@
 package lesson6
 
+import org.junit.jupiter.api.assertThrows
+import java.lang.AssertionError
 import java.lang.IllegalArgumentException
+import java.lang.NumberFormatException
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 abstract class AbstractDynamicTests {
     fun longestCommonSubSequence(longestCommonSubSequence: (String, String) -> String) {
@@ -58,6 +62,18 @@ abstract class AbstractDynamicTests {
         assertEquals(1, shortestPathOnField("input/field_in2.txt"))
         assertEquals(12, shortestPathOnField("input/field_in1.txt"))
         assertEquals(43, shortestPathOnField("input/field_in3.txt"))
+    }
+
+    fun zeroesField(shortestPathOnField: (String) -> Int) {
+        assertEquals(0, shortestPathOnField("input/field_in4.txt"))
+    }
+
+    fun decimalField(shortestPathOnField: (String) -> Int) {
+        assertEquals(94, shortestPathOnField("input/field_in5.txt"))
+    }
+
+    fun bigNumbers(shortestPathOnField: (String) -> Int) {
+        assertEquals(54968, shortestPathOnField("input/field_in6.txt"))
     }
 
 }

@@ -1,8 +1,8 @@
 package lesson6;
 
-import kotlin.NotImplementedError;
-import org.jetbrains.annotations.NotNull;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 @SuppressWarnings("unused")
@@ -20,21 +20,21 @@ public class JavaDynamicTasks {
      */
     // Трудоемкость O(N*M)
     // Ресурсоемкость O(N*M)
-    public static  String longestCommonSubSequence(String first, String second) {
+    public static String longestCommonSubSequence(String first, String second) {
         int[][] matrix = buildMatrix(first, second);
         int i = first.length();
         int j = second.length();
         StringBuilder answer = new StringBuilder();
         while ((i > 0) && (j > 0)) {
-            char f = first.charAt(i-1);
-            char s = second.charAt(j-1);
+            char f = first.charAt(i - 1);
+            char s = second.charAt(j - 1);
             if (first.charAt(i - 1) == second.charAt(j - 1)) {
                 answer.append(first.charAt(i - 1));
                 i--;
                 j--;
-            } else if (matrix[i][j] == matrix[i-1][j]) {
+            } else if (matrix[i][j] == matrix[i - 1][j]) {
                 i--;
-            } else if (matrix[i][j] == matrix[i][j-1]){
+            } else if (matrix[i][j] == matrix[i][j - 1]) {
                 j--;
             }
         }
@@ -61,7 +61,7 @@ public class JavaDynamicTasks {
 
     /**
      * Наибольшая возрастающая подпоследовательность
-     * Средняя
+     * Сложная
      * <p>
      * Дан список целых чисел, например, [2 8 5 9 12 6].
      * Найти в нём самую длинную возрастающую подпоследовательность.
@@ -71,8 +71,8 @@ public class JavaDynamicTasks {
      * то вернуть ту, в которой числа расположены раньше (приоритет имеют первые числа).
      * В примере ответами являются 2, 8, 9, 12 или 2, 5, 9, 12 -- выбираем первую из них.
      */
-    // Трудоемкость O(N*M)
-    // Ресурсоемкость O(N*M)
+    // Трудоемкость O(N^2)  Вложенный (двойной) цикл дает квадратичную трудоемкость
+    // Ресурсоемкость O(N)
     public static List<Integer> longestIncreasingSubSequence(List<Integer> list) {
         if (list.size() <= 1) {
             return list;
@@ -121,10 +121,43 @@ public class JavaDynamicTasks {
      * <p>
      * Здесь ответ 2 + 3 + 4 + 1 + 2 = 12
      */
-    public static int shortestPathOnField(String inputName) {
-        throw new NotImplementedError();
+    //Трудоемкость - O(n * m)
+    //Ресурсоемкость - O(n * m)
+    //n - высота
+    //m - ширина
+    public static int shortestPathOnField(String inputName) throws IOException {
+        String line;
+        int result;
+        int height, length;
+        List<String> inputField = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(inputName))) {
+            while ((line = bufferedReader.readLine()) != null) {
+                inputField.add(line);
+            }
+        }
+        length = inputField.get(0).split(" ").length;
+        height = inputField.size();
+        int sumField[][] = new int[height][length];
+        sumField[0][0] = getIntegerValueByIndices(inputField, 0, 0);
+        for (int i = 1; i < height; i++) {
+            sumField[i][0] = getIntegerValueByIndices(inputField, i, 0) + sumField[i - 1][0];
+        }
+        for (int j = 1; j < length; j++) {
+            sumField[0][j] = sumField[0][j - 1] + getIntegerValueByIndices(inputField, 0, j);
+        }
+        for (int i = 1; i < height; i++) {
+            for (int j = 1; j < length; j++) {
+                sumField[i][j] = Math.min(sumField[i - 1][j - 1], Math.min(sumField[i][j - 1], sumField[i - 1][j]))
+                        + getIntegerValueByIndices(inputField, i, j);
+            }
+        }
+        result = sumField[height - 1][length - 1];
+        return result;
     }
 
+    private static int getIntegerValueByIndices(List<String> inputField, int i, int j) {
+        return Integer.parseInt(inputField.get(i).split(" ")[j]);
+    }
     // Задачу "Максимальное независимое множество вершин в графе без циклов"
     // смотрите в уроке 5
 }
